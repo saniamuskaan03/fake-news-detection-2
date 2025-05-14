@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Fake News Detector</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background:rgb(233, 233, 240);
+      text-align: center;
+      background-image: url("https://images.pexels.com/photos/906055/pexels-photo-906055.jpeg?auto=compress&cs=tinysrgb&w=600");
+      background-repeat: no-repeat;
+    background-size: cover;
+      padding: 50px;
+    }
+    h1 {
+      color: #f8f4f4;
+      font-size: 100px;
+      font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    }
+    textarea {
+      width: 80%;
+      height: 120px;
+      border-radius: 10px;
+      margin-top: 20px;
+      padding: 10px;
+      font-size: 16px;
+    }
+    button {
+      padding: 10px 20px;
+      margin-top: 20px;
+      font-size: 20px;
+      background-color: #2900cc;
+      color: white;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    #result {
+      margin-top: 30px;
+      margin:1px;
+      width: 20%;
+      background-color: aliceblue;
+      font-size: 30px;
+      font-weight: bold;
+    }
+  </style>
+</head>
+<body>
+  <h1>REAL OR FAKE</h1>
+  <textarea id="newsInput" placeholder="Paste news article here(works based on the training data used)"></textarea><br>
+  <button onclick="checkNews()">PREDICT</button>
+  <br><br><br><br><br>
+  <center><div id="result"></div></center>
+
+
+
+  <script>
+    function checkNews() {
+      const text = document.getElementById("newsInput").value;
+      fetch("http://127.0.0.1:5000/predict", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ news: text })
+      })
+      .then(res => res.json())
+      .then(data => {
+        document.getElementById("result").innerText =   data.prediction;
+      })
+      .catch(err => {
+        document.getElementById("result").innerText = "Error: Could not connect to backend.";
+      });
+    }
+  </script>
+</body>
+</html>
